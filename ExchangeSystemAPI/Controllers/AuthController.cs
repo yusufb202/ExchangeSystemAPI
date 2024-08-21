@@ -112,7 +112,6 @@ namespace ExchangeSystemAPI.Controllers
         }
 
         [HttpPost("forgot-password")]
-
         public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordModel model)
         {
             var user = await _userManager.FindByEmailAsync(model.Email);
@@ -131,7 +130,6 @@ namespace ExchangeSystemAPI.Controllers
         }
 
         [HttpPost("reset-password")]
-
         public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordModel model)
         {
             var user = await _userManager.FindByEmailAsync(model.Email);
