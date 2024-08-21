@@ -1,4 +1,5 @@
 ﻿using Core.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -17,6 +18,7 @@ namespace ExchangeSystemAPI.Controllers
             _context = context;
         }
 
+        [Authorize(Policy = "Admin")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ExchangeRate>>> GetExchangeRates()
         {
@@ -26,6 +28,7 @@ namespace ExchangeSystemAPI.Controllers
                 .ToListAsync();
         }
 
+        [Authorize(Policy = "User")]
         [HttpGet("{id}")]
         public async Task<ActionResult<ExchangeRate>> GetExchangeRate(int id)
         {
@@ -42,8 +45,8 @@ namespace ExchangeSystemAPI.Controllers
             return Ok(exchangeRate);
         }
 
+        [Authorize(Policy = "Admin")]
         [HttpPut("{id}")]
-
         public async Task<IActionResult> PutExchangeRate(int id, ExchangeRate exchangeRate)
         {
             if(id!=exchangeRate.Id)
@@ -73,6 +76,7 @@ namespace ExchangeSystemAPI.Controllers
             return NoContent();
         }
 
+        [Authorize(Policy = "Admin")]
         [HttpPost]
         public async Task<ActionResult<ExchangeRate>> PostExchangeRate(ExchangeRate exchangeRate)
         {
@@ -82,6 +86,7 @@ namespace ExchangeSystemAPI.Controllers
             return CreatedAtAction("GetExchangeRate", new { id = exchangeRate.Id }, exchangeRate);
         }
 
+        [Authorize(Policy = "Admin")]
         [HttpDelete("{id}")]
 
         public async Task<IActionResult> DeleteExchangeRate(int id)

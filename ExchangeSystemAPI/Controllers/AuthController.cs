@@ -191,14 +191,22 @@ namespace ExchangeSystemAPI.Controllers
             return random.Next(10000000, 99999999).ToString();
         }
 
-        private string GenerateJwtToken(User user)
+        private async Task<string> GenerateJwtToken(User user)
         {
-            var claims = new[]
+            var roles = await _userManager.GetRolesAsync(user); // Fetch roles for the user
+            var claims = new List<Claim>
+    {
+        new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
+        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+        new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+        new Claim(ClaimTypes.Name, user.UserName)
+    };
+
+            // Add roles to claims
+            foreach (var role in roles)
             {
-            new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
-        };
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtSettings:SecretKey"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -207,10 +215,9 @@ namespace ExchangeSystemAPI.Controllers
             var token = new JwtSecurityToken(
                 _configuration["JwtSettings:Issuer"],
                 _configuration["JwtSettings:Audience"],
-                claims,
+                claims: claims,
                 expires: expires,
-                signingCredentials: creds
-            );
+                signingCredentials: creds);
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }

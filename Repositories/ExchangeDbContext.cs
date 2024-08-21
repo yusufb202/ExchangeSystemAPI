@@ -19,6 +19,7 @@ namespace Repositories
         public DbSet<Currency> Currencies { get; set; }
         public DbSet<ExchangeRate> ExchangeRates { get; set; }
         public DbSet<Wallet> Wallets { get; set; }
+        public DbSet<ExchangeTransaction> ExchangeTransactions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -46,6 +47,19 @@ namespace Repositories
                 .WithMany()
                 .HasForeignKey(e => e.ToCurrencyId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<ExchangeTransaction>()
+        .HasKey(et => et.Id);
+
+            modelBuilder.Entity<ExchangeTransaction>()
+                .HasOne(et => et.FromCurrency)
+                .WithMany()
+                .HasForeignKey(et => et.FromCurrencyId);
+
+            modelBuilder.Entity<ExchangeTransaction>()
+                .HasOne(et => et.ToCurrency)
+                .WithMany()
+                .HasForeignKey(et => et.ToCurrencyId);
 
             base.OnModelCreating(modelBuilder);
         }
