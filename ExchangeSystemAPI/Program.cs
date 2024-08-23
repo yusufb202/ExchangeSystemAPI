@@ -1,3 +1,4 @@
+using Core.Interfaces;
 using Core.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -5,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Repositories;
+using Services;
 using System.Security.Claims;
 using System.Text;
 
@@ -97,6 +99,12 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+builder.Services.AddScoped<WalletService>();
+builder.Services.AddScoped<ExchangeRateService>();
+builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<IRepository<ExchangeRate>, Repository<ExchangeRate>>();
+
 var app = builder.Build();
 
 // Seed roles and admin user
@@ -117,6 +125,9 @@ using (var scope = app.Services.CreateScope())
     var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
     await DbInitializer.SeedAdminUser(userManager, roleManager);
 }
+
+
+
 
 // Configure the HTTP request pipeline
 if (app.Environment.IsDevelopment())
