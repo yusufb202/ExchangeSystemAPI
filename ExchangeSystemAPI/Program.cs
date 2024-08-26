@@ -17,7 +17,7 @@ var builder = WebApplication.CreateBuilder(args);
 // DBContext
 builder.Services.AddDbContext<ExchangeDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
-    sqlServerOptions => sqlServerOptions.MigrationsAssembly("Repositories")).EnableSensitiveDataLogging());
+    sqlServerOptions => sqlServerOptions.MigrationsAssembly("Repositories")));
 
 // Identity
 builder.Services.AddIdentity<User, IdentityRole<int>>(options =>

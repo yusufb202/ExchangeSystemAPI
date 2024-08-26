@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace Repositories
 {
@@ -57,16 +58,28 @@ namespace Repositories
                 .HasOne(et => et.FromCurrency)
                 .WithMany()
                 .HasForeignKey(et => et.FromCurrencyId)
-                .OnDelete(DeleteBehavior.Restrict); // Change to Restrict
+                .OnDelete(DeleteBehavior.Restrict); 
 
             modelBuilder.Entity<ExchangeTransaction>()
                 .HasOne(et => et.ToCurrency)
                 .WithMany()
                 .HasForeignKey(et => et.ToCurrencyId)
-                .OnDelete(DeleteBehavior.Restrict); // Change to Restrict
+                .OnDelete(DeleteBehavior.Restrict); 
+
+            modelBuilder.Entity<UserActivityReport>()
+                .HasKey(u => u.Id); 
+
+            modelBuilder.Entity<UserActivityReport>()
+                .Property(u => u.TotalAmountExchanged)
+                .HasColumnType("decimal(18, 2)"); 
 
             base.OnModelCreating(modelBuilder);
         }
-
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder
+                .UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=ExchangeSystemDB;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False")
+                .LogTo(Console.WriteLine, LogLevel.Information);
+        }
     }
 }

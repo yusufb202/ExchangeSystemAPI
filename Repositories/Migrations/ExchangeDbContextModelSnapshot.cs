@@ -40,7 +40,7 @@ namespace Repositories.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Currencies");
+                    b.ToTable("Currencies", (string)null);
                 });
 
             modelBuilder.Entity("Core.Models.ExchangeRate", b =>
@@ -69,7 +69,7 @@ namespace Repositories.Migrations
 
                     b.HasIndex("ToCurrencyId");
 
-                    b.ToTable("ExchangeRates");
+                    b.ToTable("ExchangeRates", (string)null);
                 });
 
             modelBuilder.Entity("Core.Models.ExchangeTransaction", b =>
@@ -106,7 +106,7 @@ namespace Repositories.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("ExchangeTransactions");
+                    b.ToTable("ExchangeTransactions", (string)null);
                 });
 
             modelBuilder.Entity("Core.Models.User", b =>
@@ -200,7 +200,7 @@ namespace Repositories.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("UserActivityReports");
+                    b.ToTable("UserActivityReports", (string)null);
                 });
 
             modelBuilder.Entity("Core.Models.Wallet", b =>
@@ -226,7 +226,7 @@ namespace Repositories.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("Wallets");
+                    b.ToTable("Wallets", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<int>", b =>
