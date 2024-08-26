@@ -44,6 +44,8 @@ namespace ExchangeSystemAPI.Controllers
                 UserId = user.Id,
                 FromCurrencyId = fromCurrency.Id,
                 ToCurrencyId = toCurrency.Id,
+                FromCurrencyName = fromCurrency.Name,
+                ToCurrencyName = toCurrency.Name,
                 ExchangeRate = dto.ExchangeRate,
                 Amount = dto.Amount,
                 TransactionDate = dto.TransactionDate

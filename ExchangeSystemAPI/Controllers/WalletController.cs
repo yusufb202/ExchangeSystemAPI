@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Core.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Services;
 
@@ -52,9 +54,9 @@ namespace ExchangeSystemAPI.Controllers
         }
 
         [HttpGet("activity-reports")]
-        public async Task<IActionResult> GetUserActivityReports()
+        public async Task<IActionResult> GetUserActivityReports(int userId)
         {
-            var reports = await _userService.GetUserActivityReportsAsync();
+            var reports = await _userService.GetUserActivityReportsAsync(userId);
             return Ok(reports);
         }
 

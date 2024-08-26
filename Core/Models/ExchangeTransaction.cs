@@ -20,6 +20,14 @@ namespace Core.Models
         public User User { get; set; }
 
         [Required]
+        [MaxLength(100)]
+        public string FromCurrencyName { get; set; }
+
+        [Required]
+        [MaxLength(100)]
+        public string ToCurrencyName { get; set; }
+
+        [Required]
         public int FromCurrencyId { get; set; }
 
         [ForeignKey("FromCurrencyId")]

@@ -9,3 +9,4 @@
         public string MostTradedCurrency { get; set; }
     }
 }
+    

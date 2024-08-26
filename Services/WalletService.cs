@@ -11,14 +11,12 @@ namespace Services
     public class WalletService
     {
         private readonly IRepository<Wallet> _walletRepository;
-        private readonly IRepository<ExchangeTransaction> _exchangeTransactionRepository;
         private readonly ExchangeRateService _exchangeRateService;
         private readonly IRepository<ExchangeRate> _exchangeRateRepository;
 
-        public WalletService(IRepository<Wallet> walletRepository, IRepository<ExchangeTransaction> exchangeTransactionRepository, ExchangeRateService exchangeRateService, IRepository<ExchangeRate> exchangeRateRepository)
+        public WalletService(IRepository<Wallet> walletRepository, ExchangeRateService exchangeRateService, IRepository<ExchangeRate> exchangeRateRepository)
         {
             _walletRepository = walletRepository;
-            _exchangeTransactionRepository = exchangeTransactionRepository;
             _exchangeRateService = exchangeRateService;
             _exchangeRateRepository = exchangeRateRepository;
         }
@@ -74,24 +72,6 @@ namespace Services
                 .ToList();
         }
 
-        public async Task<List<UserActivityReport>> GetUserActivityReportsAsync(int userId)
-        {
-            var allTransactions = await _exchangeTransactionRepository.GetAllAsync(); // Get all transactions
-            var transactions = allTransactions.Where(t => t.UserId == userId).ToList(); // Filter by userId
-
-            // Generate the report, such as counting transactions, summing amounts, etc.
-            var report = new UserActivityReport
-            {
-                UserId = userId,
-                TotalTransactions = transactions.Count(), // Ensure System.Linq is included
-                TotalAmountExchanged = transactions.Sum(t => t.Amount), // Ensure System.Linq is included
-                MostTradedCurrency = transactions.GroupBy(t => t.ToCurrency.Code) // Ensure System.Linq is included
-                                                 .OrderByDescending(g => g.Count())
-                                                 .Select(g => g.Key)
-                                                 .FirstOrDefault() ?? string.Empty // Handle possible null reference
-            };
-
-            return new List<UserActivityReport> { report };
-        }
+        
     }
 }

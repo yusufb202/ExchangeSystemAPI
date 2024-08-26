@@ -26,8 +26,6 @@ namespace Repositories
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<UserActivityReport>()
-                .HasKey(u => u.Id); // Define primary key
 
             modelBuilder.Entity<User>()
                 .HasOne(u => u.Wallet)
@@ -74,12 +72,6 @@ namespace Repositories
                 .HasColumnType("decimal(18, 2)"); 
 
             base.OnModelCreating(modelBuilder);
-        }
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder
-                .UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=ExchangeSystemDB;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False")
-                .LogTo(Console.WriteLine, LogLevel.Information);
         }
     }
 }
