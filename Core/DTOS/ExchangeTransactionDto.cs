@@ -8,11 +8,11 @@ namespace Core.DTOS
 {
     public class ExchangeTransactionDto
     {
-        public string UserName { get; set; }
+        public string UserName { get; set; } = string.Empty;
 
-        public string FromCurrencyCode { get; set; }
+        public string FromCurrencyCode { get; set; } = string.Empty;
 
-        public string ToCurrencyCode { get; set; }
+        public string ToCurrencyCode { get; set; } = string.Empty;
 
         public decimal ExchangeRate { get; set; }
 

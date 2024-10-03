@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace Repositories
 {
@@ -21,8 +22,11 @@ namespace Repositories
         public DbSet<Wallet> Wallets { get; set; }
         public DbSet<ExchangeTransaction> ExchangeTransactions { get; set; }
 
+        public DbSet<UserActivityReport> UserActivityReports { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
             modelBuilder.Entity<User>()
                 .HasOne(u => u.Wallet)
                 .WithOne(w => w.User)
@@ -49,20 +53,25 @@ namespace Repositories
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<ExchangeTransaction>()
-        .HasKey(et => et.Id);
-
-            modelBuilder.Entity<ExchangeTransaction>()
                 .HasOne(et => et.FromCurrency)
                 .WithMany()
-                .HasForeignKey(et => et.FromCurrencyId);
+                .HasForeignKey(et => et.FromCurrencyId)
+                .OnDelete(DeleteBehavior.Restrict); 
 
             modelBuilder.Entity<ExchangeTransaction>()
                 .HasOne(et => et.ToCurrency)
                 .WithMany()
-                .HasForeignKey(et => et.ToCurrencyId);
+                .HasForeignKey(et => et.ToCurrencyId)
+                .OnDelete(DeleteBehavior.Restrict); 
+
+            modelBuilder.Entity<UserActivityReport>()
+                .HasKey(u => u.Id); 
+
+            modelBuilder.Entity<UserActivityReport>()
+                .Property(u => u.TotalAmountExchanged)
+                .HasColumnType("decimal(18, 2)"); 
 
             base.OnModelCreating(modelBuilder);
         }
-
     }
 }

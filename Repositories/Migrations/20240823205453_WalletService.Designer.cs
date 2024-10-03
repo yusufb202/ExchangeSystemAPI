@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Repositories;
 
@@ -11,9 +12,11 @@ using Repositories;
 namespace Repositories.Migrations
 {
     [DbContext(typeof(ExchangeDbContext))]
-    partial class ExchangeDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240823205453_WalletService")]
+    partial class WalletService
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -89,18 +92,8 @@ namespace Repositories.Migrations
                     b.Property<int>("FromCurrencyId")
                         .HasColumnType("int");
 
-                    b.Property<string>("FromCurrencyName")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
                     b.Property<int>("ToCurrencyId")
                         .HasColumnType("int");
-
-                    b.Property<string>("ToCurrencyName")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
 
                     b.Property<DateTime>("TransactionDate")
                         .HasColumnType("datetime2");
@@ -200,7 +193,7 @@ namespace Repositories.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("TotalAmountExchanged")
-                        .HasColumnType("decimal(18, 2)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("TotalTransactions")
                         .HasColumnType("int");

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Repositories;
+using Services;
 
 namespace ExchangeSystemAPI.Controllers
 {
@@ -12,10 +13,12 @@ namespace ExchangeSystemAPI.Controllers
     public class ExchangeRatesController : ControllerBase
     {
         private readonly ExchangeDbContext _context;
+        private readonly ExchangeRateService _exchangeRateService;
 
-        public ExchangeRatesController(ExchangeDbContext context)
+        public ExchangeRatesController(ExchangeDbContext context, ExchangeRateService exchangeRateService)
         {
             _context = context;
+            _exchangeRateService = exchangeRateService;
         }
 
         [Authorize(Policy = "Admin")]
@@ -109,5 +112,13 @@ namespace ExchangeSystemAPI.Controllers
         {
             return _context.ExchangeRates.Any(e=>e.Id == id);
         }
+
+        [HttpGet("trends")]
+        public async Task<IActionResult> GetTrends(string fromCurrency, string toCurrency, DateTime startDate, DateTime endDate)
+        {
+            var trends = await _exchangeRateService.GetExchangeRateTrendsAsync(fromCurrency, toCurrency, startDate, endDate);
+            return Ok(trends);
+        }
+
     }
 }
